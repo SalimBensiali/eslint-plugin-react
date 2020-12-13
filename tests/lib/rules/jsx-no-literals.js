@@ -340,6 +340,28 @@ ruleTester.run('jsx-no-literals', rule, {
       code: `
         <img alt='blank image'></img>
       `
+    },
+    {
+      code: `
+      class Comp1 extends Component {
+        render() {
+          return (
+            <div>{this.props.condition ? 'foo' : 'bar'}</div>
+          );
+        }
+      }
+      `
+    },
+    {
+      code: `
+      class Comp1 extends Component {
+        render() {
+          return (
+            <div>{this.props.condition && 'foo'}</div>
+          );
+        }
+      }
+      `
     }
   ),
 
@@ -544,6 +566,37 @@ ruleTester.run('jsx-no-literals', rule, {
       options: [{noAttributeStrings: true}],
       errors: [
         {message: attributeMessage('\'blank image\'')}]
+    },
+    {
+      code: `
+      class Comp1 extends Component {
+        render() {
+          return (
+            <div>{this.props.condition ? 'foo' : 'bar'}</div>
+          );
+        }
+      }
+      `,
+      options: [{noStrings: true}],
+      errors: [
+        {message: stringsMessage('\'foo\'')},
+        {message: stringsMessage('\'bar\'')}
+      ]
+    },
+    {
+      code: `
+      class Comp1 extends Component {
+        render() {
+          return (
+            <div>{this.props.condition && 'foo'}</div>
+          );
+        }
+      }
+      `,
+      options: [{noStrings: true}],
+      errors: [
+        {message: stringsMessage('\'foo\'')}
+      ]
     }
   ]
 });
